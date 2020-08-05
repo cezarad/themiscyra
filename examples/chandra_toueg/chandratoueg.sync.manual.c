@@ -1,16 +1,16 @@
 INIT
-    jump_to = jump_to();
+    current_phase_round = jump_to();
 
 FIRST_ROUND
     SEND:
-        if(jump_to == (PHASE, ROUND)){
+        if(current_phase_round == (PHASE, ROUND)){
             if(!value_decided(p)){
                 send(message(phase, FIRST_ROUND, estimate, p, timestamp, null_bool()), leader(phase,n)); 
             }
         }
     UPDATE:
-        jump_to = jump_to();
-        if(jump_to == (PHASE, ROUND)){
+        current_phase_round = jump_to();
+        if(current_phase_round == (PHASE, ROUND)){
             condition1 = !value_decided(p) && p == leader(phase,n) && count(mbox, phase, FIRST_ROUND, null_int()) > (n+1)/2;
 
             if(condition1){
@@ -22,7 +22,7 @@ FIRST_ROUND
 
 SECOND_ROUND
     SEND:
-        if(jump_to == (PHASE, ROUND)){
+      if(jump_to == (PHASE, ROUND)){
             if(!value_decided(p) && p == leader(phase,n) && condition1){
                 send(message(phase, SECOND_ROUND, estimate, p, null_int(), null_bool()), to_all); 
             }
